@@ -28,7 +28,7 @@ if (!(isset($_SESSION) && isset($_SESSION["username"]) && isset($_SESSION["id"])
     <div style="height:100%;display:flex;align-items:center;justify-content:center">
         <form action="uploadFile.php" method="post" enctype="multipart/form-data">
             <div class="fileReqs">
-                File must not be bigger than 5 MB.
+                File must not be bigger than 1 GB.
             </div>
             <input type="file" name="userFile" class="inputField2" id="fileField" required>
             <br><br>
@@ -78,7 +78,7 @@ if (isset($_POST) && isset($_POST["uploadButton2"])) {
         $afterTotal=($lastTotal + ($fileSize / 1024 / 1024));
 
         if ($afterTotal <= (2 * 1024)) {
-            if (($fileSize / 1024 / 1024) <= 5) {
+            if (($fileSize / 1024 / 1024) <= 1000) {
                 $fileName = basename($_FILES["userFile"]["name"]);
                 $dir = "users/" . $_SESSION["username"] . "/";
                 $temp = $_FILES["userFile"]["tmp_name"];
@@ -89,13 +89,13 @@ if (isset($_POST) && isset($_POST["uploadButton2"])) {
                     if (addFileToDB($conn, $fileName, $des, round(($fileSize / 1024 / 1024), 2), $date, $afterTotal)) {
                         echo "<script>document.getElementById('uploadError').innerHTML='Successfully Uploaded.';</script>";
                     } else {
-                        echo "<script>document.getElementById('uploadError').innerHTML='Unknown Error!';</script>";
+                        echo "<script>document.getElementById('uploadError').innerHTML='Error With Adding The File To DB!';</script>";
                     }
                 } else {
-                    echo "<script>document.getElementById('uploadError').innerHTML='Unknown Error!';</script>";
+                    echo "<script>document.getElementById('uploadError').innerHTML='Issue With Uploading The File!';</script>";
                 }
             } else {
-                echo "<script>document.getElementById('uploadError').innerHTML='File size is bigger than 1 MB!';</script>";
+                echo "<script>document.getElementById('uploadError').innerHTML='File size is bigger than 1 GB!';</script>";
             }
         } else {
             echo "<script>document.getElementById('uploadError').innerHTML='You exceeded the limit of storage capacity!';</script>";
